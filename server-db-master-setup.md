@@ -66,9 +66,9 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('member', (table) =>{
   table.increments();
   table.text('username').notNullable().unique();
-  table.text('email').unique().notNullable();
+  table.text('email').notNullable().unique();
   table.text('password').notNullable();
-  table.date('dateCreated').notNullable();
+  table.date('dateCreated').notNullable().defaultTo(new Date);
   table.boolean('isActive').notNullable().defaultTo(true);
   table.text('bio');
   })
@@ -85,7 +85,8 @@ exports.down = function(knex, Promise) {
 ```js
 table.integer('memberID').references('member.id').unsigned().onDelete('cascade')
 ```
-* Run migrations
+
+* Run migration
 ```
 knex migrate:latest
 ```
@@ -113,6 +114,7 @@ exports.seed = function(knex, Promise) {
         name: 'sam',
         email: 'sam@gmail.com',
         password: bcrypt.hashSync('sammyg21', 10)
+
       }, {
         id: 2,
         name: 'alex',
@@ -131,29 +133,33 @@ knex seed:run
 
 * Keep creating seeds and running them until your entire database is seeded
 
+## Require Knex
 
+* In your routes file make sure to require knex
+```js
+const knex = require('../db/knex');
+```
 
+* Do the same in your app.js file if you plan to write knex queries there:
+```js
+const knex = require('../db/knex');
+```
 
+## CORS
 
+* Install CORS module
+```
+yarn add cors
+```
 
+* In app.js
+```js
+const cors = require('cors');
 
+// Make sure the following line is above your routes
+app.use(cors());
+```
 
+## FIN
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Dependencies
+Fin.
